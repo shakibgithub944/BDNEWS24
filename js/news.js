@@ -26,21 +26,23 @@ const setCategory = async () => {
     });
 }
 setCategory();
-
+// click and category wise result showing
 const displayNews = async (category_id) => {
 
     const response = await fetch(`https://openapi.programming-hero.com/api/news/category/0${category_id}`);
     const data = await response.json();
-    console.log(data.data.length)
+    // console.log(data.data.length)
     const newsFoundNumber = document.getElementById('newsFoundNumber');
     newsFoundNumber.innerHTML = `
-    <p class="px-5">${data.data.length} News Found</p>
+    <p class="px-3 fs-4">${data.data.length} News Found</p>
     `;
+
     const newsContainer = document.getElementById('news-container');
     newsContainer.textContent = '';
+
     data.data.forEach(item => {
         // console.log(item);
-        const { title, total_view, author, details, thumbnail_url } = item;
+        const { title, total_view, author, details, thumbnail_url, _id } = item;
         const div = document.createElement('div');
         div.innerHTML = `       
         <div class="card mb-3" style="max-width: 640px;">
@@ -58,7 +60,7 @@ const displayNews = async (category_id) => {
                        <span class="mx-3 text-secondary"><b>${author.name?author.name:'N/A'}</b></span>
                     </div>
                       <div class="text-secondary"><b><i class="bi bi-eye-fill"></i> ${total_view ? total_view : 'N/A'}</b></div>
-                     <div class=""><button class="btn btn-outline-info">Read More...</button></div>
+                     <div class=""><button onclick="detailsInModal('${_id}')" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#showDetailsInModal">Read More...</button></div>
                  </div>
             </div>
           </div>
@@ -70,3 +72,29 @@ const displayNews = async (category_id) => {
 
 };
 
+const detailsInModal = async(newsId) => {
+    // console.log(newsId);
+
+    const response = await fetch(`https://openapi.programming-hero.com/api/news/${newsId}`);
+    const data = await response.json();
+    console.log(data.data[0]);
+    const {title, author, image_url, details, }=data.data[0];
+
+    const newsDetailsContainer = document.getElementById('newsDetailsContainer');
+    newsDetailsContainer.innerHTML=`
+    <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="showDetailsInModalLabel">${title}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <img class="w-50" src="${image_url}" alt="author img">
+          <p>Writter: <b>${author.name ? author.name : 'N/A'}</b></p>
+          <p>${details}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    `;
+}
