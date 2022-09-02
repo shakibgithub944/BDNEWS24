@@ -57,7 +57,7 @@ const displayNews = async (category_id) => {
                      <img  src="${author.img ? author.img : 'N/A'}" style="width:40px; height:40px; border-radius:50%;" alt="">
                        <span class="mx-3 text-secondary"><b>${author.name?author.name:'N/A'}</b></span>
                     </div>
-                     <div class="text-secondary"><b><i class="bi bi-eye-fill"></i> ${total_view ? total_view : 'N/A'}</b></div>
+                      <div class="text-secondary"><b><i class="bi bi-eye-fill"></i> ${total_view ? total_view : 'N/A'}</b></div>
                      <div class=""><button class="btn btn-outline-info">Read More...</button></div>
                  </div>
             </div>
