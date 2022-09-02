@@ -71,7 +71,7 @@ const displayNews = async (category_id) => {
     });
 
 };
-
+// Show News Details in modal ... 
 const detailsInModal = async(newsId) => {
     // console.log(newsId);
 
