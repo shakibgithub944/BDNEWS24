@@ -19,7 +19,7 @@ const setCategory = async () => {
     // console.log(category);
     const div = document.createElement('div');
     div.innerHTML = `
-        <li onclick="displayNews(${category.category_id})" class="mx-5"><b>${category.category_name}</b></li>
+        <li onclick="displayNews(${category.category_id})" class="mx-5 li-style"><b>${category.category_name}</b></li>
         `;
     categoryList.appendChild(div);
 
