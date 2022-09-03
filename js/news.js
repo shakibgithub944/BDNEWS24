@@ -19,7 +19,7 @@ const setCategory = async () => {
         // console.log(category);
         const div = document.createElement('div');
         div.innerHTML = `
-        <a onclick="displayNews(${category.category_id})" class="text-decoration-none text-dark"><b>${category.category_name}</b></a>
+        <li onclick="displayNews(${category.category_id})" class="mx-5"><b>${category.category_name}</b></li>
         `;
         categoryList.appendChild(div);
 
@@ -37,7 +37,7 @@ const displayNews = async (category_id) => {
     // console.log(data.data.length)
     const newsFoundNumber = document.getElementById('newsFoundNumber');
     newsFoundNumber.innerHTML = `
-    <p class="px-3 fs-4">${data.data.length} News Found</p>
+    <p class="px-3 fs-4">${data.data.length !==0 ? data.data.length : 'No'} News Found</p>
     `;
 
     const newsContainer = document.getElementById('news-container');
@@ -79,7 +79,6 @@ const displayNews = async (category_id) => {
 // Show News Details in modal ... 
 const detailsInModal = async (newsId) => {
     // console.log(newsId);
-
     const response = await fetch(`https://openapi.programming-hero.com/api/news/${newsId}`);
     const data = await response.json();
     console.log(data.data[0]);
