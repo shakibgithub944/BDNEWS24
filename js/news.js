@@ -28,7 +28,10 @@ const setCategory = async () => {
 setCategory();
 // click and category wise result showing
 const displayNews = async (category_id) => {
+  const spinners = document.getElementById('spinners');
+  spinners.classList.remove('d-none');
 
+    // showingSpinner(true);
     const response = await fetch(`https://openapi.programming-hero.com/api/news/category/0${category_id}`);
     const data = await response.json();
     // console.log(data.data.length)
@@ -57,7 +60,7 @@ const displayNews = async (category_id) => {
               <div class="d-flex justify-content-between align-items-center">
                  <div class="d-flex align-items-center">
                      <img  src="${author.img ? author.img : 'N/A'}" style="width:40px; height:40px; border-radius:50%;" alt="">
-                       <span class="mx-3 text-secondary"><b>${author.name?author.name:'N/A'}</b></span>
+                       <span class="mx-3 text-secondary"><b>${author.name ? author.name : 'N/A'}</b></span>
                     </div>
                       <div class="text-secondary"><b><i class="bi bi-eye-fill"></i> ${total_view ? total_view : 'N/A'}</b></div>
                      <div class=""><button onclick="detailsInModal('${_id}')" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#showDetailsInModal">Read More...</button></div>
@@ -68,20 +71,22 @@ const displayNews = async (category_id) => {
       </div>
         `;
         newsContainer.appendChild(div);
+        spinners.classList.add('d-none');
     });
 
 };
+
 // Show News Details in modal ... 
-const detailsInModal = async(newsId) => {
+const detailsInModal = async (newsId) => {
     // console.log(newsId);
 
     const response = await fetch(`https://openapi.programming-hero.com/api/news/${newsId}`);
     const data = await response.json();
     console.log(data.data[0]);
-    const {title, author, image_url, details, }=data.data[0];
+    const { title, author, image_url, details, } = data.data[0];
 
     const newsDetailsContainer = document.getElementById('newsDetailsContainer');
-    newsDetailsContainer.innerHTML=`
+    newsDetailsContainer.innerHTML = `
     <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="showDetailsInModalLabel">${title}</h5>
