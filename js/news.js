@@ -43,6 +43,7 @@ const displayNews = async (category_id) => {
   DefaultnewsContainer.textContent = '';
 
   const newsContainer = document.getElementById('news-container');
+  spinners.classList.add('d-none');
   newsContainer.textContent = '';
 
   //news sort function 
@@ -79,7 +80,7 @@ const displayNews = async (category_id) => {
       </div>
         `;
     newsContainer.appendChild(div);
-    spinners.classList.add('d-none');
+    // spinners.classList.add('d-none');
   });
 
 };
