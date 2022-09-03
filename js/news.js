@@ -88,8 +88,9 @@ const detailsInModal = async (newsId) => {
   // console.log(newsId);
   const response = await fetch(`https://openapi.programming-hero.com/api/news/${newsId}`);
   const data = await response.json();
-  console.log(data.data[0]);
-  const { title, author, image_url, details, } = data.data[0];
+
+  // console.log(data.data[0]);
+  const { title, author, image_url, details, total_view } = data.data[0];
 
   const newsDetailsContainer = document.getElementById('newsDetailsContainer');
   newsDetailsContainer.innerHTML = `
@@ -100,7 +101,9 @@ const detailsInModal = async (newsId) => {
         </div>
         <div class="modal-body">
           <img class="w-50" src="${image_url}" alt="author img">
-          <p>Writter: <b>${author.name ? author.name : 'N/A'}</b></p>
+          <p>Reporter: <b>${author.name ? author.name : 'N/A'}</b></p>
+          <p>Published Date: <b>${author.published_date ? author.published_date : 'N/A'}</b></p>
+          <div class="text-secondary mb-3">Total View:  <b><i class="bi bi-eye-fill"></i> ${total_view ? total_view : 'N/A'}</b></div>
           <p>${details}</p>
         </div>
         <div class="modal-footer">
@@ -112,9 +115,14 @@ const detailsInModal = async (newsId) => {
 
 const loadAllNews = () => {
   const url = 'https://openapi.programming-hero.com/api/news/category/08';
-  fetch(url)
-    .then(res => res.json())
-    .then(data => displaAllNews(data.data));
+  try {
+    fetch(url)
+      .then(res => res.json())
+      .then(data => displaAllNews(data.data));
+  }
+  catch (err) {
+    console.log(err);
+  }
 }
 const displaAllNews = (allNews) => {
   //news sort function 
