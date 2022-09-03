@@ -1,29 +1,29 @@
 const loadData = async () => {
-    try {
-        const response = await fetch('https://openapi.programming-hero.com/api/news/categories');
-        const data = await response.json();
-        // console.log(data.data.news_category);
-        return data.data.news_category;
-    }
-    catch {
-        console.log('error from main loader function');
-    }
+  try {
+    const response = await fetch('https://openapi.programming-hero.com/api/news/categories');
+    const data = await response.json();
+    // console.log(data.data.news_category);
+    return data.data.news_category;
+  }
+  catch {
+    console.log('error from main loader function');
+  }
 
 };
 
 const setCategory = async () => {
-    const AllCategory = await loadData();
-    // console.log(AllCategory);
-    const categoryList = document.getElementById('cetegory-container');
-    AllCategory.forEach(category => {
-        // console.log(category);
-        const div = document.createElement('div');
-        div.innerHTML = `
+  const AllCategory = await loadData();
+  // console.log(AllCategory);
+  const categoryList = document.getElementById('cetegory-container');
+  AllCategory.forEach(category => {
+    // console.log(category);
+    const div = document.createElement('div');
+    div.innerHTML = `
         <li onclick="displayNews(${category.category_id})" class="mx-5"><b>${category.category_name}</b></li>
         `;
-        categoryList.appendChild(div);
+    categoryList.appendChild(div);
 
-    });
+  });
 }
 setCategory();
 // click and category wise result showing
@@ -31,23 +31,27 @@ const displayNews = async (category_id) => {
   const spinners = document.getElementById('spinners');
   spinners.classList.remove('d-none');
 
-    // showingSpinner(true);
-    const response = await fetch(`https://openapi.programming-hero.com/api/news/category/0${category_id}`);
-    const data = await response.json();
-    // console.log(data.data.length)
-    const newsFoundNumber = document.getElementById('newsFoundNumber');
-    newsFoundNumber.innerHTML = `
-    <p class="px-3 fs-4">${data.data.length !==0 ? data.data.length : 'No'} News Found</p>
+  const response = await fetch(`https://openapi.programming-hero.com/api/news/category/0${category_id}`);
+  const data = await response.json();
+  // console.log(data.data.length)
+  const newsFoundNumber = document.getElementById('newsFoundNumber');
+  newsFoundNumber.innerHTML = `
+    <p class="px-3 fs-4">${data.data.length !== 0 ? data.data.length : 'No'} News Found</p>
     `;
+  const newsContainer = document.getElementById('news-container');
+  newsContainer.textContent = '';
 
-    const newsContainer = document.getElementById('news-container');
-    newsContainer.textContent = '';
+  //news sort function 
+  data.data.sort((a, b) => {
+    return b.total_view - a.total_view
+  });
+  // console.log(data.data)
 
-    data.data.forEach(item => {
-        // console.log(item);
-        const { title, total_view, author, details, thumbnail_url, _id } = item;
-        const div = document.createElement('div');
-        div.innerHTML = `       
+  data.data.forEach(item => {
+    // console.log(item);
+    const { title, total_view, author, details, thumbnail_url, _id } = item;
+    const div = document.createElement('div');
+    div.innerHTML = `       
         <div class="card mb-3" style="max-width: 640px;">
         <div class="row g-0">
           <div class="col-md-4">
@@ -70,22 +74,23 @@ const displayNews = async (category_id) => {
         </div>                   
       </div>
         `;
-        newsContainer.appendChild(div);
-        spinners.classList.add('d-none');
-    });
+    newsContainer.appendChild(div);
+    spinners.classList.add('d-none');
+  });
 
 };
 
+
 // Show News Details in modal ... 
 const detailsInModal = async (newsId) => {
-    // console.log(newsId);
-    const response = await fetch(`https://openapi.programming-hero.com/api/news/${newsId}`);
-    const data = await response.json();
-    console.log(data.data[0]);
-    const { title, author, image_url, details, } = data.data[0];
+  // console.log(newsId);
+  const response = await fetch(`https://openapi.programming-hero.com/api/news/${newsId}`);
+  const data = await response.json();
+  console.log(data.data[0]);
+  const { title, author, image_url, details, } = data.data[0];
 
-    const newsDetailsContainer = document.getElementById('newsDetailsContainer');
-    newsDetailsContainer.innerHTML = `
+  const newsDetailsContainer = document.getElementById('newsDetailsContainer');
+  newsDetailsContainer.innerHTML = `
     <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="showDetailsInModalLabel">${title}</h5>
