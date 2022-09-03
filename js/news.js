@@ -38,6 +38,10 @@ const displayNews = async (category_id) => {
   newsFoundNumber.innerHTML = `
     <p class="px-3 fs-4">${data.data.length !== 0 ? data.data.length : 'No'} News Found</p>
     `;
+
+  const DefaultnewsContainer = document.getElementById('DefaultnewsContainer');
+  DefaultnewsContainer.textContent = '';
+
   const newsContainer = document.getElementById('news-container');
   newsContainer.textContent = '';
 
@@ -79,8 +83,6 @@ const displayNews = async (category_id) => {
   });
 
 };
-
-
 // Show News Details in modal ... 
 const detailsInModal = async (newsId) => {
   // console.log(newsId);
@@ -106,4 +108,52 @@ const detailsInModal = async (newsId) => {
         </div>
       </div>
     `;
+};
+
+const loadAllNews = () => {
+  const url = 'https://openapi.programming-hero.com/api/news/category/08';
+  fetch(url)
+    .then(res => res.json())
+    .then(data => displaAllNews(data.data));
 }
+const displaAllNews = (allNews) => {
+  //news sort function 
+  allNews.sort((a, b) => {
+    return b.total_view - a.total_view
+  });
+  // console.log(data.data)
+
+  //  console.log(allNews);
+  allNews.forEach(item => {
+    // console.log(item)
+    const DefaultnewsContainer = document.getElementById('DefaultnewsContainer');
+    const { title, total_view, author, details, thumbnail_url, _id } = item;
+    const div = document.createElement('div');
+    div.innerHTML = `       
+        <div class="card mb-3" style="max-width: 640px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="${thumbnail_url}" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">${title}</h5>
+              <p class="card-text">${details.length > 400 ? details.slice(0, 400) + '...' : details}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                 <div class="d-flex align-items-center">
+                     <img  src="${author.img ? author.img : 'N/A'}" style="width:40px; height:40px; border-radius:50%;" alt="">
+                       <span class="mx-3 text-secondary"><b>${author.name ? author.name : 'N/A'}</b></span>
+                    </div>
+                      <div class="text-secondary"><b><i class="bi bi-eye-fill"></i> ${total_view ? total_view : 'N/A'}</b></div>
+                     <div class=""><button onclick="detailsInModal('${_id}')" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#showDetailsInModal">Read More...</button></div>
+                 </div>
+            </div>
+          </div>
+        </div>                   
+      </div>
+        `;
+    DefaultnewsContainer.appendChild(div);
+
+  });
+}
+loadAllNews();
